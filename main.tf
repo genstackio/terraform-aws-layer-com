@@ -67,6 +67,7 @@ module "pinpoint-app" {
   version   = "0.1.0"
   name      = "${var.env}-${replace(var.dns, ".", "-")}"
   email     = null != var.pinpoint_channels.email ? {from = "${var.identities[var.pinpoint_channels.email.identity]}@${var.dns}", identity = module.ses-regional-identity-shared.arn} : null
+  sms       = null != var.pinpoint_channels.sms ? {} : null
   providers = {
     aws = aws.shared
   }

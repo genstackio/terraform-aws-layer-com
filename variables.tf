@@ -22,5 +22,6 @@ variable "service_sources" {
 variable "pinpoint_channels" {
   type = object({
     email = object({identity = string})
+    sms   = optional(object({}))
   })
 }
