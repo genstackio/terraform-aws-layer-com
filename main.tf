@@ -64,7 +64,7 @@ module "ses-regional-verification-shared" {
 
 module "pinpoint-app" {
   source    = "genstackio/pinpoint/aws"
-  version   = "0.1.0"
+  version   = "0.1.1"
   name      = "${var.env}-${replace(var.dns, ".", "-")}"
   email     = null != var.pinpoint_channels.email ? {from = "${var.identities[var.pinpoint_channels.email.identity]}@${var.dns}", identity = module.ses-regional-identity-shared.arn} : null
   sms       = null != var.pinpoint_channels.sms ? {} : null
