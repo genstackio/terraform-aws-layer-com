@@ -1,13 +1,13 @@
 module "ses-global" {
   source  = "genstackio/ses/aws//modules/global"
-  version = "0.2.0"
+  version = "0.3.0"
   domain  = var.dns
   zone    = var.zone
 }
 
 module "ses-regional-identity" {
   source          = "genstackio/ses/aws//modules/regional-identity"
-  version         = "0.2.0"
+  version         = "0.3.0"
   name            = "${var.env}-${replace(var.dns, ".", "-")}"
   sources         = var.sources
   service_sources = var.service_sources
@@ -17,7 +17,7 @@ module "ses-regional-identity" {
 }
 module "ses-regional-identity-shared" {
   source          = "genstackio/ses/aws//modules/regional-identity"
-  version         = "0.2.0"
+  version         = "0.3.0"
   name            = "${var.env}-${replace(var.dns, ".", "-")}"
   sources         = var.sources
   service_sources = var.service_sources
@@ -31,7 +31,7 @@ module "ses-regional-identity-shared" {
 
 module "ses-global-verification" {
   source          = "genstackio/ses/aws//modules/global-verification"
-  version         = "0.2.0"
+  version         = "0.3.0"
   domain          = var.dns
   zone            = var.zone
   identities      = local.identities
@@ -39,13 +39,13 @@ module "ses-global-verification" {
 
 module "ses-regional-verification" {
   source    = "genstackio/ses/aws//modules/regional-verification"
-  version   = "0.2.0"
+  version   = "0.3.0"
   id        = module.ses-regional-identity.id
   depends_on = [module.ses-global-verification]
 }
 module "ses-regional-verification-shared" {
   source    = "genstackio/ses/aws//modules/regional-verification"
-  version   = "0.2.0"
+  version   = "0.3.0"
   id        = module.ses-regional-identity-shared.id
   providers = {
     aws = aws.shared
@@ -55,7 +55,7 @@ module "ses-regional-verification-shared" {
 
 module "pinpoint-app" {
   source    = "genstackio/pinpoint/aws"
-  version   = "0.1.1"
+  version   = "0.2.0"
   name      = "${var.env}-${replace(var.dns, ".", "-")}"
   email     = null != var.pinpoint_channels.email ? {from = "${var.identities[var.pinpoint_channels.email.identity]}@${var.dns}", identity = module.ses-regional-identity-shared.arn} : null
   sms       = null != var.pinpoint_channels.sms ? {} : null
