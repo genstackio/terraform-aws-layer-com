@@ -68,7 +68,7 @@ module "notifications" {
   for_each = (null != var.notifications_topic_arn) ? {for k,v in local.flatten_identities: k => {identity = lookup(v, "arn"), topic_arn = var.notifications_topic_arn, types = lookup(v, "types", ["Bounce", "Delivery", "Complaint"])}} : {}
   source    = "genstackio/ses/aws//modules/notifications"
   version   = "0.3.2"
-  identity  = var.dns
+  identity  = lookup(each.value, "identity")
   topic_arn = lookup(each.value, "topic_arn")
   types     = lookup(each.value, "types")
 }
@@ -77,7 +77,7 @@ module "notifications-shared" {
   for_each = (null != var.notifications_shared_topic_arn) ? {for k,v in local.flatten_identities_shared: k => {identity = lookup(v, "arn"), topic_arn = var.notifications_shared_topic_arn, types = lookup(v, "types", ["Bounce", "Delivery", "Complaint"])}} : {}
   source    = "genstackio/ses/aws//modules/notifications"
   version   = "0.3.2"
-  identity  = var.dns
+  identity  = lookup(each.value, "identity")
   topic_arn = lookup(each.value, "topic_arn")
   types     = lookup(each.value, "types")
   providers = {
