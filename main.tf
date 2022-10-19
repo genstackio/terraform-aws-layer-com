@@ -74,7 +74,7 @@ module "notifications" {
 }
 
 module "notifications-shared" {
-  for_each = (null != var.notifications_topic_arn) ? {all = {topic_arn = var.notifications_topic_arn, types = ["Bounce", "Delivery", "Complaint"]}} : {}
+  for_each = (null != var.notifications_shared_topic_arn) ? {all = {topic_arn = var.notifications_shared_topic_arn, types = ["Bounce", "Delivery", "Complaint"]}} : {}
   source    = "genstackio/ses/aws//modules/notifications"
   version   = "0.3.1"
   domain    = var.dns

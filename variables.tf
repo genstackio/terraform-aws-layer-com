@@ -29,3 +29,7 @@ variable "notifications_topic_arn" {
   type    = string
   default = null
 }
+variable "notifications_shared_topic_arn" {
+  type    = string
+  default = null
+}
