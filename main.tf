@@ -1,13 +1,13 @@
 module "ses-global" {
   source  = "genstackio/ses/aws//modules/global"
-  version = "0.3.1"
+  version = "0.3.2"
   domain  = var.dns
   zone    = var.zone
 }
 
 module "ses-regional-identity" {
   source          = "genstackio/ses/aws//modules/regional-identity"
-  version         = "0.3.1"
+  version         = "0.3.2"
   name            = "${var.env}-${replace(var.dns, ".", "-")}"
   sources         = var.sources
   service_sources = var.service_sources
@@ -17,7 +17,7 @@ module "ses-regional-identity" {
 }
 module "ses-regional-identity-shared" {
   source          = "genstackio/ses/aws//modules/regional-identity"
-  version         = "0.3.1"
+  version         = "0.3.2"
   name            = "${var.env}-${replace(var.dns, ".", "-")}"
   sources         = var.sources
   service_sources = var.service_sources
@@ -31,7 +31,7 @@ module "ses-regional-identity-shared" {
 
 module "ses-global-verification" {
   source          = "genstackio/ses/aws//modules/global-verification"
-  version         = "0.3.1"
+  version         = "0.3.2"
   domain          = var.dns
   zone            = var.zone
   identities      = local.identities
@@ -39,13 +39,13 @@ module "ses-global-verification" {
 
 module "ses-regional-verification" {
   source    = "genstackio/ses/aws//modules/regional-verification"
-  version   = "0.3.1"
+  version   = "0.3.2"
   id        = module.ses-regional-identity.id
   depends_on = [module.ses-global-verification]
 }
 module "ses-regional-verification-shared" {
   source    = "genstackio/ses/aws//modules/regional-verification"
-  version   = "0.3.1"
+  version   = "0.3.2"
   id        = module.ses-regional-identity-shared.id
   providers = {
     aws = aws.shared
@@ -65,19 +65,19 @@ module "pinpoint-app" {
 }
 
 module "notifications" {
-  for_each = (null != var.notifications_topic_arn) ? {all = {topic_arn = var.notifications_topic_arn, types = ["Bounce", "Delivery", "Complaint"]}} : {}
+  for_each = (null != var.notifications_topic_arn) ? {for k,v in local.flatten_identities: k => {identity = lookup(v, "arn"), topic_arn = var.notifications_topic_arn, types = lookup(v, "types", ["Bounce", "Delivery", "Complaint"])}} : {}
   source    = "genstackio/ses/aws//modules/notifications"
-  version   = "0.3.1"
-  domain    = var.dns
+  version   = "0.3.2"
+  identity  = var.dns
   topic_arn = lookup(each.value, "topic_arn")
   types     = lookup(each.value, "types")
 }
 
 module "notifications-shared" {
-  for_each = (null != var.notifications_shared_topic_arn) ? {all = {topic_arn = var.notifications_shared_topic_arn, types = ["Bounce", "Delivery", "Complaint"]}} : {}
+  for_each = (null != var.notifications_shared_topic_arn) ? {for k,v in local.flatten_identities_shared: k => {identity = lookup(v, "arn"), topic_arn = var.notifications_shared_topic_arn, types = lookup(v, "types", ["Bounce", "Delivery", "Complaint"])}} : {}
   source    = "genstackio/ses/aws//modules/notifications"
-  version   = "0.3.1"
-  domain    = var.dns
+  version   = "0.3.2"
+  identity  = var.dns
   topic_arn = lookup(each.value, "topic_arn")
   types     = lookup(each.value, "types")
   providers = {
