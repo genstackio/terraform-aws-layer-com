@@ -1,6 +1,6 @@
 locals {
   identities = {
-    main   = module.ses-regional-identity
-    shared = module.ses-regional-identity-shared
+    main   = merge(module.ses-regional-identity, {shared = false})
+    shared = merge(module.ses-regional-identity-shared, {shared = true})
   }
 }
