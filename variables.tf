@@ -25,3 +25,7 @@ variable "pinpoint_channels" {
     sms   = optional(object({}))
   })
 }
+variable "notifications_topic_arn" {
+  type    = string
+  default = null
+}
