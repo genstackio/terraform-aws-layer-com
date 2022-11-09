@@ -30,8 +30,8 @@ variable "domains" {
     dns               = string
     zone              = optional(string)
     identities        = map(string)
-    sources           = optional(list(string), [])
-    service_sources   = optional(list(string), [])
+    sources           = optional(list(string))
+    service_sources   = optional(list(string))
     pinpoint_channels = optional(object({
       email = optional(object({identity = string}))
       sms = optional(object({}))
