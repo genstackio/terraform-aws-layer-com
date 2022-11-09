@@ -25,3 +25,17 @@ variable "pinpoint_channels" {
     sms   = optional(object({}))
   })
 }
+variable "domains" {
+  type = object({
+    dns               = string
+    zone              = optional(string)
+    identities        = map(string)
+    sources           = optional(list(string), [])
+    service_sources   = optional(list(string), [])
+    pinpoint_channels = optional(object({
+      email = optional(object({identity = string}))
+      sms = optional(object({}))
+    }))
+  })
+  default = {}
+}
