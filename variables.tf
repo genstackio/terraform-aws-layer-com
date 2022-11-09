@@ -26,7 +26,7 @@ variable "pinpoint_channels" {
   })
 }
 variable "domains" {
-  type = object({
+  type = map(object({
     dns               = string
     zone              = optional(string)
     identities        = map(string)
@@ -36,6 +36,6 @@ variable "domains" {
       email = optional(object({identity = string}))
       sms = optional(object({}))
     }))
-  })
+  }))
   default = {}
 }
