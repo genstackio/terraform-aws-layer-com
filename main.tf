@@ -70,7 +70,7 @@ module "ses-global-verification-domains" {
   version    = "0.3.4"
   domain     = lookup(each.value, "dns", each.key)
   zone       = lookup(each.value, "zone", null)
-  identities = local.identities_domains
+  identities = local.identities_domains[k]
 }
 
 module "ses-regional-verification" {
