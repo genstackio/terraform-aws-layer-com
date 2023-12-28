@@ -108,7 +108,7 @@ module "ses-regional-verification-shared-domains" {
 
 module "pinpoint-app" {
   source    = "genstackio/pinpoint/aws"
-  version   = "0.2.0"
+  version   = "0.3.0"
   name      = "${var.env}-${replace(var.dns, ".", "-")}"
   email     = null != var.pinpoint_channels.email ? {from = "${var.identities[var.pinpoint_channels.email.identity]}@${var.dns}", identity = module.ses-regional-identity-shared.arn} : null
   sms       = null != var.pinpoint_channels.sms ? {} : null
@@ -119,7 +119,7 @@ module "pinpoint-app" {
 module "pinpoint-app-domains" {
   for_each  = { for k,v in var.domains: k => v if null != lookup(v, "pinpoint_channels", null) && true == lookup(v, "shared", true) }
   source    = "genstackio/pinpoint/aws"
-  version   = "0.2.0"
+  version   = "0.3.0"
   name      = lookup(each.value, "name", "${var.env}-${replace(lookup(each.value, "dns", each.key), ".", "-")}")
   email     = null != lookup(lookup(each.value, "pinpoint_channels", {email = null}), "email", null) ? {
       from = format("%s@%s", lookup(lookup(each.value, "identities", {}), lookup(lookup(lookup(each.value, "pinpoint_channels", {email = null}), "email", null), "identity", {}), ""), lookup(each.value, "dns", null)),

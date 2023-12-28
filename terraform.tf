@@ -6,5 +6,4 @@ terraform {
       configuration_aliases = [aws.shared]
     }
   }
-  experiments = [module_variable_optional_attrs]
 }
